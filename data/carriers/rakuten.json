@@ -1,0 +1,134 @@
+{
+  "carrierId": "rakuten",
+  "carrierName": "楽天モバイル",
+  "carrierType": "mvno",
+  "officialName": "楽天モバイル株式会社",
+  "networkType": "rakuten_network",
+  "supportedTechnologies": ["4G", "5G"],
+  "websiteUrl": "https://network.mobile.rakuten.co.jp/",
+  "customerServicePhone": "050-5434-4653",
+  "businessHours": "9:00-20:00 (年中無休)",
+  
+  "mnpInfo": {
+    "mnpReservationMethod": [
+      {
+        "method": "my_rakuten_mobile",
+        "name": "my 楽天モバイル",
+        "url": "https://portal-roaming.mobile.rakuten.co.jp/",
+        "availableHours": "24時間",
+        "processingTime": "即時発行"
+      },
+      {
+        "method": "phone",
+        "name": "電話",
+        "phoneNumber": "050-5434-4653",
+        "availableHours": "9:00-20:00",
+        "processingTime": "約10分"
+      }
+    ],
+    "mnpReservationFee": 0,
+    "minimumUsagePeriod": "なし",
+    "earlyTerminationFee": 0,
+    "mnpReservationValidityDays": 15
+  },
+
+  "contractInfo": {
+    "contractFee": 0,
+    "simIssueFee": 0,
+    "esimSupported": true,
+    "simTypes": ["nanoSIM", "eSIM"],
+    "onlineContractAvailable": true,
+    "storeContractAvailable": true,
+    "minimumAge": 18,
+    "identificationRequired": ["運転免許証", "マイナンバーカード", "健康保険証+補助書類"]
+  },
+
+  "planInfo": {
+    "mainPlans": [
+      {
+        "planName": "Rakuten最強プラン",
+        "monthlyFee": 1078,
+        "dataLimit": "無制限",
+        "dataLimitDetails": "楽天回線エリア無制限、パートナー回線5GB/月",
+        "callRate": "Rakuten Linkアプリ利用で国内通話かけ放題",
+        "features": ["5G対応", "データ無制限", "通話かけ放題"]
+      }
+    ]
+  },
+
+  "technicalInfo": {
+    "apnSettings": {
+      "apn": "rakuten.jp",
+      "username": "",
+      "password": "",
+      "authType": "CHAP",
+      "apnType": "default,supl,dun"
+    },
+    "supportedBands": {
+      "4g": ["Band 3", "Band 18", "Band 26"],
+      "5g": ["n77", "n257"]
+    },
+    "networkCoverage": {
+      "rakutenArea": "主要都市部中心",
+      "partnerArea": "全国(au回線)"
+    }
+  },
+
+  "activationProcess": {
+    "physicalSim": [
+      "SIMカード到着後、my 楽天モバイルにログイン",
+      "「申込み履歴」から該当の申込みを選択",
+      "「MNP転入を開始する」をタップ",
+      "開通手続き完了（約30分で完了）",
+      "SIMカードを挿入",
+      "APN設定を実施"
+    ],
+    "esim": [
+      "my 楽天モバイルアプリをダウンロード",
+      "申込み完了後、アプリでeSIMダウンロード",
+      "開通手続きを実施",
+      "約30分で開通完了"
+    ],
+    "supportUrl": "https://network.mobile.rakuten.co.jp/guide/mnp/"
+  },
+
+  "features": {
+    "uniqueFeatures": [
+      "データ使用量に応じた段階料金制",
+      "楽天ポイントが貯まる・使える",
+      "楽天経済圏との連携",
+      "Rakuten Linkアプリで通話かけ放題"
+    ],
+    "advantages": [
+      "月額料金が安い",
+      "契約期間の縛りなし",
+      "5G対応",
+      "店舗サポートあり"
+    ],
+    "disadvantages": [
+      "エリアが限定的",
+      "建物内で電波が弱い場合がある",
+      "通話品質がアプリ依存"
+    ]
+  },
+
+  "troubleshooting": {
+    "commonIssues": [
+      {
+        "issue": "電波が弱い・圏外になる",
+        "solution": "パートナー回線エリアでの利用、WiFi併用を推奨"
+      },
+      {
+        "issue": "Rakuten Linkで通話できない", 
+        "solution": "アプリの再インストール、電話帳への電話番号登録確認"
+      },
+      {
+        "issue": "データ通信ができない",
+        "solution": "APN設定の確認、SIMカードの挿し直し"
+      }
+    ]
+  },
+
+  "lastUpdated": "2024-06-18",
+  "version": "1.0"
+}

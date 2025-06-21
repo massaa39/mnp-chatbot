@@ -1,0 +1,165 @@
+{
+  "carrierId": "iijmio",
+  "carrierName": "IIJmio",
+  "carrierType": "mvno",
+  "officialName": "株式会社インターネットイニシアティブ",
+  "networkType": "multi_carrier",
+  "supportedTechnologies": ["4G", "5G"],
+  "websiteUrl": "https://www.iijmio.jp/",
+  "customerServicePhone": "0570-09-4400",
+  "businessHours": "9:00-19:00 (年中無休)",
+  
+  "mnpInfo": {
+    "mnpReservationMethod": [
+      {
+        "method": "mypage",
+        "name": "会員専用ページ",
+        "url": "https://www.iijmio.jp/member/",
+        "availableHours": "24時間",
+        "processingTime": "即時発行"
+      },
+      {
+        "method": "phone",
+        "name": "電話",
+        "phoneNumber": "0570-09-4400",
+        "availableHours": "9:00-19:00",
+        "processingTime": "約10分"
+      }
+    ],
+    "mnpReservationFee": 0,
+    "minimumUsagePeriod": "なし", 
+    "earlyTerminationFee": 0,
+    "mnpReservationValidityDays": 15
+  },
+
+  "contractInfo": {
+    "contractFee": 3300,
+    "simIssueFee": 433,
+    "esimSupported": true,
+    "simTypes": ["nanoSIM", "microSIM", "標準SIM", "eSIM"],
+    "onlineContractAvailable": true,
+    "storeContractAvailable": false,
+    "minimumAge": 18,
+    "identificationRequired": ["運転免許証", "マイナンバーカード", "健康保険証+補助書類"]
+  },
+
+  "planInfo": {
+    "networkOptions": [
+      {
+        "network": "ドコモ網",
+        "carrier": "ドコモ回線",
+        "features": ["広いエリア", "安定通信", "5G対応"]
+      },
+      {
+        "network": "au網",
+        "carrier": "au回線", 
+        "features": ["地下鉄で強い", "山間部カバー", "5G対応"]
+      }
+    ],
+    "mainPlans": [
+      {
+        "planName": "ギガプラン 2GB",
+        "monthlyFee": 850,
+        "dataLimit": "2GB",
+        "callRate": "11円/30秒"
+      },
+      {
+        "planName": "ギガプラン 4GB", 
+        "monthlyFee": 990,
+        "dataLimit": "4GB",
+        "callRate": "11円/30秒"
+      },
+      {
+        "planName": "ギガプラン 8GB",
+        "monthlyFee": 1500,
+        "dataLimit": "8GB",
+        "callRate": "11円/30秒"
+      },
+      {
+        "planName": "ギガプラン 15GB",
+        "monthlyFee": 1800,
+        "dataLimit": "15GB",
+        "callRate": "11円/30秒"
+      },
+      {
+        "planName": "ギガプラン 20GB",
+        "monthlyFee": 2000,
+        "dataLimit": "20GB",
+        "callRate": "11円/30秒"
+      }
+    ]
+  },
+
+  "technicalInfo": {
+    "apnSettings": {
+      "apn": "iijmio.jp",
+      "username": "mio@iij",
+      "password": "iij",
+      "authType": "PAP or CHAP",
+      "apnType": "default,supl"
+    },
+    "supportedBands": {
+      "docomo_4g": ["Band 1", "Band 3", "Band 19", "Band 21"],
+      "au_4g": ["Band 1", "Band 18", "Band 26"],
+      "5g": ["n77", "n78", "n257"]
+    }
+  },
+
+  "activationProcess": {
+    "physicalSim": [
+      "SIMカード到着後、会員専用ページにログイン",
+      "「開通手続き」を選択",
+      "SIMカード台紙のICCIDを入力",
+      "「開通」実行（数分〜1時間で完了）",
+      "SIMカードを挿入",
+      "APN設定を実施"
+    ],
+    "esim": [
+      "IIJmioクーポンスイッチアプリをダウンロード",
+      "申込み完了後、アプリでeSIMプロファイルをダウンロード",
+      "開通手続き実行",
+      "数分で開通完了"
+    ],
+    "supportUrl": "https://www.iijmio.jp/help/mnp/"
+  },
+
+  "features": {
+    "uniqueFeatures": [
+      "業界最安級の料金設定",
+      "ドコモ・au回線から選択可能",
+      "通話料半額（11円/30秒）",
+      "データシェア・繰越対応"
+    ],
+    "advantages": [
+      "月額料金が非常に安い",
+      "通話料が安い",
+      "5G対応",
+      "技術力の高いサポート"
+    ],
+    "disadvantages": [
+      "平日昼間の速度低下",
+      "店舗サポートなし",
+      "キャンペーンが少ない"
+    ]
+  },
+
+  "troubleshooting": {
+    "commonIssues": [
+      {
+        "issue": "通信速度が遅い",
+        "solution": "混雑時間帯（12-13時）の利用を避ける、WiFi併用"
+      },
+      {
+        "issue": "eSIMプロファイルがダウンロードできない",
+        "solution": "アプリの再インストール、WiFi環境での設定"
+      },
+      {
+        "issue": "データ量の確認ができない",
+        "solution": "IIJmioクーポンスイッチアプリで確認、会員ページで確認"
+      }
+    ]
+  },
+
+  "lastUpdated": "2024-06-18",
+  "version": "1.0"
+}

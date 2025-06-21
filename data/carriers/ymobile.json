@@ -1,0 +1,152 @@
+{
+  "carrierId": "ymobile",
+  "carrierName": "Y!mobile",
+  "carrierType": "sub_brand",
+  "officialName": "ソフトバンク株式会社",
+  "networkType": "softbank_network",
+  "supportedTechnologies": ["4G", "5G"],
+  "websiteUrl": "https://www.ymobile.jp/",
+  "customerServicePhone": "0120-921-156",
+  "businessHours": "9:00-20:00 (年中無休)",
+  
+  "mnpInfo": {
+    "mnpReservationMethod": [
+      {
+        "method": "my_ymobile",
+        "name": "My Y!mobile",
+        "url": "https://my.ymobile.jp/",
+        "availableHours": "24時間",
+        "processingTime": "即時発行"
+      },
+      {
+        "method": "phone",
+        "name": "電話",
+        "phoneNumber": "0120-921-156",
+        "availableHours": "9:00-20:00",
+        "processingTime": "約15分"
+      }
+    ],
+    "mnpReservationFee": 0,
+    "minimumUsagePeriod": "なし",
+    "earlyTerminationFee": 0,
+    "mnpReservationValidityDays": 15
+  },
+
+  "contractInfo": {
+    "contractFee": 3850,
+    "simIssueFee": 0,
+    "esimSupported": true,
+    "simTypes": ["nanoSIM", "eSIM"],
+    "onlineContractAvailable": true,
+    "storeContractAvailable": true,
+    "minimumAge": 18,
+    "identificationRequired": ["運転免許証", "マイナンバーカード", "健康保険証+補助書類"]
+  },
+
+  "planInfo": {
+    "mainPlans": [
+      {
+        "planName": "シンプル2 S",
+        "monthlyFee": 2365,
+        "discountedFee": 1265,
+        "dataLimit": "4GB",
+        "discountConditions": "家族割サービス+PayPayカード割",
+        "callRate": "22円/30秒",
+        "features": ["低速時300kbps", "余ったデータ翌月繰越"]
+      },
+      {
+        "planName": "シンプル2 M",
+        "monthlyFee": 4015,
+        "discountedFee": 2915,
+        "dataLimit": "20GB",
+        "discountConditions": "家族割サービス+PayPayカード割",
+        "callRate": "22円/30秒",
+        "features": ["低速時1Mbps", "余ったデータ翌月繰越"]
+      },
+      {
+        "planName": "シンプル2 L",
+        "monthlyFee": 5115,
+        "discountedFee": 4015,
+        "dataLimit": "30GB",
+        "discountConditions": "家族割サービス+PayPayカード割",
+        "callRate": "22円/30秒",
+        "features": ["低速時1Mbps", "余ったデータ翌月繰越"]
+      }
+    ]
+  },
+
+  "technicalInfo": {
+    "apnSettings": {
+      "apn": "plus.acs.jp.v6",
+      "username": "ym",
+      "password": "ym",
+      "authType": "CHAP",
+      "apnType": "default,mms,supl,hipri,dun"
+    },
+    "supportedBands": {
+      "4g": ["Band 1", "Band 3", "Band 8", "Band 28"],
+      "5g": ["n77", "n257"]
+    },
+    "networkCoverage": {
+      "coverage": "ソフトバンク回線利用、全国人口カバー率99%以上"
+    }
+  },
+
+  "activationProcess": {
+    "physicalSim": [
+      "SIMカード到着後、Y!mobileオンラインストアにログイン",
+      "「回線切替手続き」を選択",
+      "WEB受注番号とSIM製造番号を入力",
+      "「回線切替」実行（約15分で完了）",
+      "SIMカードを挿入",
+      "APN設定を実施（Android端末）"
+    ],
+    "esim": [
+      "Y!mobileアプリをダウンロード",
+      "申込み完了後、アプリでeSIMプロファイルをダウンロード",
+      "回線切替手続き",
+      "約15分で開通完了"
+    ],
+    "supportUrl": "https://www.ymobile.jp/support/mnp/"
+  },
+
+  "features": {
+    "uniqueFeatures": [
+      "ソフトバンク品質の高速ネットワーク",
+      "家族割サービス（2回線目以降1,100円割引）",
+      "Yahoo!プレミアム特典込み",
+      "ソフトバンクWi-Fiスポット無料"
+    ],
+    "advantages": [
+      "通信品質が高い",
+      "家族割がお得",
+      "店舗サポート充実",
+      "PayPayボーナス特典"
+    ],
+    "disadvantages": [
+      "単体だと料金高め",
+      "データプラン選択肢少ない",
+      "キャリアメール有料"
+    ]
+  },
+
+  "troubleshooting": {
+    "commonIssues": [
+      {
+        "issue": "5G接続できない",
+        "solution": "5G対応エリア確認、5G設定オン、端末5G対応確認"
+      },
+      {
+        "issue": "家族割が適用されない",
+        "solution": "家族割の申込み確認、同一名義または家族確認書類の提出"
+      },
+      {
+        "issue": "ソフトバンクWi-Fiに接続できない",
+        "solution": "一括設定プロファイルのインストール、Wi-Fi設定確認"
+      }
+    ]
+  },
+
+  "lastUpdated": "2024-06-18",
+  "version": "1.0"
+}

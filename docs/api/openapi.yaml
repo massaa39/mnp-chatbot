@@ -1,0 +1,1014 @@
+openapi: 3.0.3
+info:
+  title: <‰SIM MNPµÝüÈÁãÃÈÜÃÈ API
+  description: |
+    å,n<‰SIM‹m“gnMNPMobile Number Portability	ŠÿH’/ôY‹AIÁãÃÈÜÃÈnREST APIÕØø
+    
+    })âÐ¤ëmineoUQâÐ¤ëY!mobileIIJmioIn<‰SIM‹mkyW_µÝüÈ’Ð›
+    OpenAI GPT-4hRAGRetrieval-Augmented Generation	€Skˆ‹Ø¾¦jÞT_ý’-	
+    
+    ## ;_ý
+    - <‰SIMyAIþq
+    - ªóé¤óKšM¬¤É
+    - SIM«üÉMû‹µÝüÈ
+    - APN-š¢·¹¿óÈ
+    - ¨¹«ìü·çó_ý
+    
+  version: 1.0.0
+  contact:
+    name: MNP Chatbot Development Team
+    email: support@mnp-chatbot.example.com
+  license:
+    name: MIT License
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: http://localhost:3001/api/v1
+    description: ‹z°ƒ
+  - url: https://api.mnp-chatbot.example.com/v1
+    description: ,j°ƒ
+  - url: https://staging-api.mnp-chatbot.example.com/v1
+    description: ¹Æü¸ó°°ƒ
+
+tags:
+  - name: chat
+    description: ÁãÃÈ_ý¢#
+  - name: sessions
+    description: »Ã·çó¡
+  - name: faq
+    description: FAQ"
+  - name: escalation
+    description: ¨¹«ìü·çó_ý
+  - name: health
+    description: Øë¹Á§Ã¯
+
+paths:
+  /chat/sessions:
+    post:
+      tags:
+        - sessions
+      summary: °WDÁãÃÈ»Ã·çó’\
+      description: |
+        <‰SIM MNPµÝüÈ(n°WDÁãÃÈ»Ã·çó’‹ËW~Y
+        æü¶ünú,Å1hY‹þqâüÉ’šWf\
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - mode
+              properties:
+                mode:
+                  type: string
+                  enum: [roadmap, step_by_step]
+                  description: þqâüÉ
+                  example: step_by_step
+                phoneNumber:
+                  type: string
+                  pattern: '^(070|080|090)[0-9]{8}$'
+                  description: :/ûqj÷
+                  example: "09012345678"
+                currentCarrier:
+                  type: string
+                  enum: [rakuten, mineo, uq, ymobile, iijmio, ocn, biglobe, other]
+                  description: þ(n<‰SIM‹m
+                  example: "mineo"
+                targetCarrier:
+                  type: string
+                  enum: [rakuten, mineo, uq, ymobile, iijmio, ahamo, povo, linemo, undecided]
+                  description: âen<‰SIM‹m
+                  example: "rakuten"
+                preferences:
+                  type: object
+                  description: æü¶ü-š
+                  properties:
+                    language:
+                      type: string
+                      default: "ja"
+                    notifications:
+                      type: boolean
+                      default: true
+      responses:
+        '201':
+          description: »Ã·çó\Ÿ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateSessionResponse'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /chat/sessions/verify:
+    post:
+      tags:
+        - sessions
+      summary: »Ã·çón	¹'’<
+      description: šUŒ_»Ã·çóÈü¯ón	¹'h	¹P’ºW~Y
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - sessionToken
+              properties:
+                sessionToken:
+                  type: string
+                  format: uuid
+                  description: »Ã·çóÈü¯ó
+                  example: "550e8400-e29b-41d4-a716-446655440000"
+      responses:
+        '200':
+          description: <Pœ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VerifySessionResponse'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+
+  /chat/messages:
+    post:
+      tags:
+        - chat
+      summary: ÁãÃÈáÃ»ü¸’á
+      description: |
+        æü¶üK‰náÃ»ü¸’×QÖŠGPT-4hRAG"kˆ‹ÞT’W~Y
+        <‰SIM MNPkyW_ÞTh¢¯·çó’Ð›
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - message
+                - sessionToken
+              properties:
+                message:
+                  type: string
+                  minLength: 1
+                  maxLength: 1000
+                  description: æü¶üáÃ»ü¸
+                  example: "})âÐ¤ëK‰mineokWŠÛH_DgY"
+                sessionToken:
+                  type: string
+                  format: uuid
+                  description: »Ã·çóÈü¯ó
+                  example: "550e8400-e29b-41d4-a716-446655440000"
+                mode:
+                  type: string
+                  enum: [roadmap, step_by_step]
+                  description: þqâüÉª×·çó	
+                  example: "step_by_step"
+                contextData:
+                  type: object
+                  description: ³óÆ­¹ÈÇü¿
+                  properties:
+                    currentStep:
+                      type: string
+                      description: þ(n¹ÆÃ×
+                    userPreferences:
+                      type: object
+                      description: æü¶ü-š
+      responses:
+        '200':
+          description: AIÜTŸ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatResponse'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '429':
+          $ref: '#/components/responses/RateLimitError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /chat/history/{sessionToken}:
+    get:
+      tags:
+        - chat
+      summary: ÁãÃÈet’Ö—
+      description: šUŒ_»Ã·çónÁãÃÈet’Úü¸Íü·çóØMgÖ—W~Y
+      parameters:
+        - name: sessionToken
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: »Ã·çóÈü¯ó
+          example: "550e8400-e29b-41d4-a716-446655440000"
+        - name: page
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+          description: Úü¸j÷
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 50
+          description: 1Úü¸B_ŠnÖ—öp
+      responses:
+        '200':
+          description: etÖ—Ÿ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatHistoryResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /faq/search:
+    post:
+      tags:
+        - faq
+      summary: FAQ"
+      description: |
+        <‰SIM MNPk¢Y‹FAQ’­üïüÉ"W~Y
+        Ù¯Èë"h­üïüÉ"’D[_Ø¾¦"’Ð›
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - query
+              properties:
+                query:
+                  type: string
+                  minLength: 1
+                  maxLength: 200
+                  description: "¯¨ê
+                  example: "MNPˆj÷ 	¹P"
+                category:
+                  type: string
+                  enum: [mnp_basic, carrier_specific, troubleshooting]
+                  description: FAQ«Æ´ê
+                  example: "mnp_basic"
+                carrierSpecific:
+                  type: string
+                  enum: [rakuten, mineo, uq, ymobile, iijmio, ocn, biglobe]
+                  description: yš‹mQFAQ
+                  example: "rakuten"
+                limit:
+                  type: integer
+                  minimum: 1
+                  maximum: 20
+                  default: 10
+                  description: Ö—öp
+      responses:
+        '200':
+          description: "Ÿ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FAQSearchResponse'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+
+  /escalation:
+    post:
+      tags:
+        - escalation
+      summary: ¨¹«ìü·çó‹Ë
+      description: |
+        ÑjOL„yŠj±ü¹’º“nªÚìü¿ük¨¹«ìü·çóW~Y
+        ÁãÃÈeth³óÆ­¹È’+€s0Å1’á
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - sessionToken
+                - reason
+                - urgencyLevel
+                - customerInfo
+                - contextData
+              properties:
+                sessionToken:
+                  type: string
+                  format: uuid
+                  description: »Ã·çóÈü¯ó
+                reason:
+                  type: string
+                  minLength: 1
+                  maxLength: 500
+                  description: ¨¹«ìü·çó1
+                  example: "ÑjMNPKšMg%þÜLÅ"
+                urgencyLevel:
+                  type: string
+                  enum: [low, medium, high]
+                  description: Ê%¦ìÙë
+                  example: "medium"
+                customerInfo:
+                  type: object
+                  required:
+                    - preferredContact
+                  properties:
+                    name:
+                      type: string
+                      maxLength: 50
+                      description: J¢Ø
+                    email:
+                      type: string
+                      format: email
+                      description: áüë¢Éì¹
+                    preferredContact:
+                      type: string
+                      enum: [line, phone, email]
+                      description: #a¹Õ
+                      example: "line"
+                contextData:
+                  type: object
+                  required:
+                    - lastQuery
+                    - currentStep
+                    - conversation
+                  properties:
+                    lastQuery:
+                      type: string
+                      description:  ŒnêO
+                    currentStep:
+                      type: string
+                      description: þ(n¹ÆÃ×
+                    conversation:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/Message'
+                      description: qet
+      responses:
+        '200':
+          description: ¨¹«ìü·çó‹ËŸ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EscalationResponse'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /health:
+    get:
+      tags:
+        - health
+      summary: ·¹ÆàØë¹Á§Ã¯
+      description: |
+        APIµüÐüÇü¿Ùü¹RedisOpenAI API¥šn¶K’ºW~Y
+        ã–·¹ÆàK‰nšÁ§Ã¯k(
+      responses:
+        '200':
+          description: ·¹Æàc8
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum: [ok, error]
+                    example: "ok"
+                  timestamp:
+                    type: string
+                    format: date-time
+                    example: "2024-06-18T10:30:00Z"
+                  version:
+                    type: string
+                    example: "1.0.0"
+                  services:
+                    type: object
+                    properties:
+                      database:
+                        type: string
+                        enum: [ok, error]
+                        example: "ok"
+                      redis:
+                        type: string
+                        enum: [ok, error]
+                        example: "ok"
+                      openai:
+                        type: string
+                        enum: [ok, error]
+                        example: "ok"
+        '503':
+          description: ·¹Æàp8
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthErrorResponse'
+
+components:
+  schemas:
+    CreateSessionResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        data:
+          type: object
+          properties:
+            sessionToken:
+              type: string
+              format: uuid
+              description: »Ã·çóÈü¯ó
+              example: "550e8400-e29b-41d4-a716-446655440000"
+            user:
+              $ref: '#/components/schemas/UserInfo'
+            session:
+              $ref: '#/components/schemas/SessionInfo'
+        metadata:
+          $ref: '#/components/schemas/APIMetadata'
+
+    VerifySessionResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        data:
+          type: object
+          properties:
+            valid:
+              type: boolean
+              description: »Ã·çó	¹'
+              example: true
+            user:
+              $ref: '#/components/schemas/UserInfo'
+            session:
+              $ref: '#/components/schemas/SessionInfo'
+            expiresAt:
+              type: string
+              format: date-time
+              description: 	¹P
+              example: "2024-06-19T10:30:00Z"
+
+    ChatResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        data:
+          type: object
+          properties:
+            message:
+              type: string
+              description: AIÜTáÃ»ü¸
+              example: "})âÐ¤ëK‰mineoxnMNPKšM’µÝüÈW~Y~Z})âÐ¤ëgMNPˆj÷’Ö—Y‹ÅLBŠ~Y"
+            sessionToken:
+              type: string
+              format: uuid
+              description: »Ã·çóÈü¯ó
+            suggestions:
+              type: array
+              items:
+                type: string
+              description: ÐHûxž¢
+              example: ["MNPˆj÷nÖ—¹Õ", "mineo™Ñ×éó", "‹~gnAŒ"]
+            actions:
+              type: array
+              items:
+                $ref: '#/components/schemas/ChatAction'
+              description: ŸLïý¢¯·çó
+            currentStep:
+              type: string
+              description: þ(n¹ÆÃ×
+              example: "mnp_reservation"
+            needsEscalation:
+              type: boolean
+              description: ¨¹«ìü·çó¨h
+              example: false
+            escalation:
+              $ref: '#/components/schemas/EscalationInfo'
+            metadata:
+              type: object
+              properties:
+                responseTime:
+                  type: number
+                  description: ÜTB“ßêÒ	
+                  example: 1500
+                confidenceScore:
+                  type: number
+                  minimum: 0
+                  maximum: 1
+                  description: ÞTá<¦
+                  example: 0.92
+                ragResults:
+                  type: integer
+                  description: RAG"Pœp
+                  example: 3
+
+    ChatHistoryResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        data:
+          type: object
+          properties:
+            messages:
+              type: array
+              items:
+                $ref: '#/components/schemas/Message'
+            session:
+              $ref: '#/components/schemas/SessionInfo'
+            user:
+              $ref: '#/components/schemas/UserInfo'
+            pagination:
+              $ref: '#/components/schemas/PaginationResponse'
+
+    FAQSearchResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        data:
+          type: object
+          properties:
+            faqs:
+              type: array
+              items:
+                $ref: '#/components/schemas/FAQ'
+            searchMetadata:
+              type: object
+              properties:
+                query:
+                  type: string
+                  description: "¯¨ê
+                  example: "MNPˆj÷ 	¹P"
+                resultsCount:
+                  type: integer
+                  description: "Pœp
+                  example: 3
+                searchTime:
+                  type: number
+                  description: "B“ßêÒ	
+                  example: 150
+                relevanceThreshold:
+                  type: number
+                  description: ¢#¦¾$
+                  example: 0.7
+
+    EscalationResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        data:
+          type: object
+          properties:
+            escalationId:
+              type: string
+              format: uuid
+              description: ¨¹«ìü·çóID
+              example: "abc12345-def6-7890-ghi1-234567890abc"
+            estimatedWaitTime:
+              type: integer
+              description: ¨š…aB“	
+              example: 15
+            lineUrl:
+              type: string
+              format: uri
+              description: LINEøÇURL
+              example: "https://lin.ee/mnp-support"
+            ticketNumber:
+              type: string
+              description: Á±ÃÈj÷
+              example: "MNP-2024-001234"
+            message:
+              type: string
+              description: H…áÃ»ü¸
+              example: "€ªÚìü¿üLµÝüÈW~YLINE~_oJûqgT#aO`UD"
+
+    UserInfo:
+      type: object
+      properties:
+        sessionId:
+          type: string
+          description: »Ã·çóID
+          example: "session_123456"
+        phoneNumber:
+          type: string
+          description: ûqj÷
+          example: "09012345678"
+        currentCarrier:
+          type: string
+          enum: [rakuten, mineo, uq, ymobile, iijmio, ocn, biglobe, other]
+          description: þ(n<‰SIM‹m
+          example: "mineo"
+        targetCarrier:
+          type: string
+          enum: [rakuten, mineo, uq, ymobile, iijmio, ahamo, povo, linemo, undecided]
+          description: âe‹m
+          example: "rakuten"
+        status:
+          type: string
+          enum: [active, completed, escalated]
+          description: ¹Æü¿¹
+          example: "active"
+        preferences:
+          type: object
+          description: æü¶ü-š
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    SessionInfo:
+      type: object
+      properties:
+        sessionToken:
+          type: string
+          format: uuid
+          description: »Ã·çóÈü¯ó
+        mode:
+          type: string
+          enum: [roadmap, step_by_step]
+          description: þqâüÉ
+        currentStep:
+          type: string
+          description: þ(n¹ÆÃ×
+        scenarioData:
+          type: object
+          description: ·ÊêªÇü¿
+        contextData:
+          type: object
+          description: ³óÆ­¹ÈÇü¿
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    Message:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: áÃ»ü¸ID
+        sessionId:
+          type: string
+          description: »Ã·çóID
+        messageType:
+          type: string
+          enum: [user, assistant, system]
+          description: áÃ»ü¸.%
+        content:
+          type: string
+          description: áÃ»ü¸…¹
+        metadata:
+          type: object
+          description: á¿Çü¿
+        embeddingVector:
+          type: array
+          items:
+            type: number
+          description: ¨óÙÇ£ó°Ù¯Èëª×·çó	
+        confidenceScore:
+          type: number
+          description: á<¦¹³¢
+        responseTimeMs:
+          type: integer
+          description: ÜTB“ßêÒ	
+        createdAt:
+          type: string
+          format: date-time
+
+    FAQ:
+      type: object
+      properties:
+        id:
+          type: string
+          description: FAQ ID
+        category:
+          type: string
+          enum: [mnp_basic, carrier_specific, troubleshooting]
+          description: «Æ´ê
+        subcategory:
+          type: string
+          description: µÖ«Æ´ê
+        question:
+          type: string
+          description: êO
+        answer:
+          type: string
+          description: ÞT
+        keywords:
+          type: array
+          items:
+            type: string
+          description: ­üïüÉ
+        priority:
+          type: integer
+          description: *H¦
+        carrierSpecific:
+          type: string
+          enum: [rakuten, mineo, uq, ymobile, iijmio, ocn, biglobe]
+          description: ‹mú	ª×·çó	
+        isActive:
+          type: boolean
+          description: 	¹Õé°
+        version:
+          type: integer
+          description: Ðü¸çó
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    ChatAction:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [button, link, escalation, quick_reply]
+          description: ¢¯·çó.%
+        label:
+          type: string
+          description: h:éÙë
+        value:
+          type: string
+          description: ¢¯·çó$
+        url:
+          type: string
+          format: uri
+          description: êó¯URLª×·çó	
+        style:
+          type: string
+          enum: [primary, secondary, danger]
+          description: ¹¿¤ë
+
+    EscalationInfo:
+      type: object
+      properties:
+        reason:
+          type: string
+          description: ¨¹«ìü·çó1
+        lineUrl:
+          type: string
+          format: uri
+          description: LINEøÇURL
+        contextData:
+          type: object
+          properties:
+            lastQuery:
+              type: string
+            currentStep:
+              type: string
+            conversation:
+              type: array
+              items:
+                $ref: '#/components/schemas/Message'
+
+    PaginationResponse:
+      type: object
+      properties:
+        total:
+          type: integer
+          description: Ïöp
+          example: 25
+        page:
+          type: integer
+          description: þ(Úü¸
+          example: 1
+        limit:
+          type: integer
+          description: 1Úü¸B_Šöp
+          example: 10
+        totalPages:
+          type: integer
+          description: ÏÚü¸p
+          example: 3
+        hasNext:
+          type: boolean
+          description: !Úü¸n	!
+          example: true
+        hasPrev:
+          type: boolean
+          description: MÚü¸n	!
+          example: false
+
+    APIMetadata:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+          description: ì¹Ýó¹B;
+        requestId:
+          type: string
+          format: uuid
+          description: ê¯¨¹ÈID
+        version:
+          type: string
+          description: APIÐü¸çó
+          example: "1.0.0"
+
+    HealthErrorResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [error]
+          example: "error"
+        timestamp:
+          type: string
+          format: date-time
+        services:
+          type: object
+          properties:
+            database:
+              type: string
+              enum: [ok, error]
+            redis:
+              type: string
+              enum: [ok, error]
+            openai:
+              type: string
+              enum: [ok, error]
+        errors:
+          type: array
+          items:
+            type: string
+          description: ¨éüs0
+
+    APIError:
+      type: object
+      properties:
+        error:
+          type: string
+          description: ¨éü‚
+        code:
+          type: string
+          description: ¨éü³üÉ
+        message:
+          type: string
+          description: ¨éüáÃ»ü¸
+        details:
+          type: object
+          description: ¨éüs0ª×·çó	
+        timestamp:
+          type: string
+          format: date-time
+          description: ¨éüzB;
+
+  responses:
+    ValidationError:
+      description: ÐêÇü·çó¨éü
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                example: false
+              error:
+                allOf:
+                  - $ref: '#/components/schemas/APIError'
+                  - type: object
+                    properties:
+                      code:
+                        type: string
+                        example: "VALIDATION_ERROR"
+                      details:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            field:
+                              type: string
+                              example: "phoneNumber"
+                            message:
+                              type: string
+                              example: "cWD:/ûqj÷’e›WfO`UD"
+                            value:
+                              type: string
+                              example: "invalid-phone"
+
+    UnauthorizedError:
+      description: <¨éü
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                example: false
+              error:
+                allOf:
+                  - $ref: '#/components/schemas/APIError'
+                  - type: object
+                    properties:
+                      code:
+                        type: string
+                        example: "INVALID_SESSION_TOKEN"
+                      message:
+                        type: string
+                        example: "»Ã·çóÈü¯óL!¹gY"
+
+    NotFoundError:
+      description: ê½ü¹L‹dK‰jD
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                example: false
+              error:
+                allOf:
+                  - $ref: '#/components/schemas/APIError'
+                  - type: object
+                    properties:
+                      code:
+                        type: string
+                        example: "SESSION_NOT_FOUND"
+                      message:
+                        type: string
+                        example: "šUŒ_»Ã·çóL‹dKŠ~[“"
+
+    RateLimitError:
+      description: ìüÈ6P¨éü
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                example: false
+              error:
+                allOf:
+                  - $ref: '#/components/schemas/APIError'
+                  - type: object
+                    properties:
+                      code:
+                        type: string
+                        example: "RATE_LIMIT_EXCEEDED"
+                      message:
+                        type: string
+                        example: "ìüÈ6PkTW~W_Wp‰OB“’JDfK‰¦JfWO`UD"
+
+    InternalServerError:
+      description: µüÐü…è¨éü
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                example: false
+              error:
+                allOf:
+                  - $ref: '#/components/schemas/APIError'
+                  - type: object
+                    properties:
+                      code:
+                        type: string
+                        example: "INTERNAL_SERVER_ERROR"
+                      message:
+                        type: string
+                        example: "µüÐü…è¨éüLzW~W_"
+
+  securitySchemes:
+    SessionToken:
+      type: apiKey
+      in: header
+      name: X-Session-Token
+      description: »Ã·çóÈü¯ókˆ‹<
+
+security:
+  - SessionToken: []

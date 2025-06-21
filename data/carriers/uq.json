@@ -1,0 +1,150 @@
+{
+  "carrierId": "uq",
+  "carrierName": "UQモバイル",
+  "carrierType": "sub_brand",
+  "officialName": "UQコミュニケーションズ株式会社",
+  "networkType": "au_network",
+  "supportedTechnologies": ["4G", "5G"],
+  "websiteUrl": "https://www.uqwimax.jp/mobile/",
+  "customerServicePhone": "0120-929-818",
+  "businessHours": "9:00-20:00 (年中無休)",
+  
+  "mnpInfo": {
+    "mnpReservationMethod": [
+      {
+        "method": "my_uq",
+        "name": "My UQ mobile",
+        "url": "https://my.uqmobile.jp/",
+        "availableHours": "24時間",
+        "processingTime": "即時発行"
+      },
+      {
+        "method": "phone",
+        "name": "電話",
+        "phoneNumber": "0120-001-659",
+        "availableHours": "9:00-20:00",
+        "processingTime": "約10分"
+      }
+    ],
+    "mnpReservationFee": 0,
+    "minimumUsagePeriod": "なし",
+    "earlyTerminationFee": 0,
+    "mnpReservationValidityDays": 15
+  },
+
+  "contractInfo": {
+    "contractFee": 3850,
+    "simIssueFee": 0,
+    "esimSupported": true,
+    "simTypes": ["nanoSIM", "eSIM"],
+    "onlineContractAvailable": true,
+    "storeContractAvailable": true,
+    "minimumAge": 18,
+    "identificationRequired": ["運転免許証", "マイナンバーカード", "健康保険証+補助書類"]
+  },
+
+  "planInfo": {
+    "mainPlans": [
+      {
+        "planName": "ミニミニプラン",
+        "monthlyFee": 2365,
+        "discountedFee": 1265,
+        "dataLimit": "4GB",
+        "discountConditions": "自宅セット割+au PAYカードお支払い割",
+        "callRate": "22円/30秒",
+        "features": ["節約モード時300kbps", "余ったデータ翌月繰越"]
+      },
+      {
+        "planName": "トクトクプラン",
+        "monthlyFee": 3465,
+        "discountedFee": 2365,
+        "dataLimit": "15GB",
+        "discountConditions": "自宅セット割+au PAYカードお支払い割",
+        "callRate": "22円/30秒",
+        "features": ["1GB以下なら自動割引", "節約モード時1Mbps"]
+      },
+      {
+        "planName": "コミコミプラン",
+        "monthlyFee": 3278,
+        "dataLimit": "20GB",
+        "callRate": "10分以内かけ放題込み",
+        "features": ["10分かけ放題込み", "節約モード時1Mbps", "割引対象外"]
+      }
+    ]
+  },
+
+  "technicalInfo": {
+    "apnSettings": {
+      "apn": "uqmobile.jp",
+      "username": "uq@uqmobile.jp",
+      "password": "uq",
+      "authType": "CHAP",
+      "apnType": "default,mms,supl,hipri,dun"
+    },
+    "supportedBands": {
+      "4g": ["Band 1", "Band 18", "Band 26"],
+      "5g": ["n77", "n78"]
+    },
+    "networkCoverage": {
+      "coverage": "au回線利用、全国人口カバー率99%以上"
+    }
+  },
+
+  "activationProcess": {
+    "physicalSim": [
+      "SIMカード到着後、My UQ mobileにログイン",
+      "「回線切替」メニューを選択",
+      "SIMカード台紙記載の製造番号を入力",
+      "「回線切替」実行（約30分で完了）",
+      "SIMカードを挿入",
+      "APN設定を実施（iPhone以外）"
+    ],
+    "esim": [
+      "My UQ mobileアプリをダウンロード",
+      "申込み完了後、アプリでeSIMプロファイルをダウンロード",
+      "回線切替手続き",
+      "約30分で開通完了"
+    ],
+    "supportUrl": "https://www.uqwimax.jp/mobile/support/guide/mnp/"
+  },
+
+  "features": {
+    "uniqueFeatures": [
+      "au品質の高速ネットワーク",
+      "自宅セット割（auでんき・auひかり等）",
+      "節約モードでデータ消費ゼロ",
+      "店舗サポート充実（auショップ・UQスポット）"
+    ],
+    "advantages": [
+      "通信品質が高い",
+      "割引適用で格安",
+      "店舗サポートあり",
+      "5G標準対応"
+    ],
+    "disadvantages": [
+      "割引なしだと料金高め",
+      "家族割なし",
+      "データプランが少ない"
+    ]
+  },
+
+  "troubleshooting": {
+    "commonIssues": [
+      {
+        "issue": "5G接続できない",
+        "solution": "5G対応エリア確認、5G設定オン、端末5G対応確認"
+      },
+      {
+        "issue": "節約モードに切り替わらない",
+        "solution": "My UQ mobileアプリで手動切替、アプリ再起動"
+      },
+      {
+        "issue": "自宅セット割が適用されない",
+        "solution": "auでんき・auひかり等の契約確認、別途申込み要"
+      }
+    ]
+  },
+
+  "lastUpdated": "2024-06-18",
+  "version": "1.0"
+}

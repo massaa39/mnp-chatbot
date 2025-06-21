@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#2563eb" />
+  <meta name="description" content="MNP（携帯番号ポータビリティ）手続きをサポートするAIチャットボット。日本の主要キャリアのMNP手続きを24時間サポート" />
+  <meta name="keywords" content="MNP,携帯番号ポータビリティ,ドコモ,au,ソフトバンク,楽天モバイル,チャットボット" />
+  <meta name="author" content="MNP Support Center" />
+  
+  <!-- PWA設定 -->
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="MNP チャットサポート" />
+  
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="MNP チャットサポート" />
+  <meta property="og:description" content="携帯番号ポータビリティ手続きを簡単に。24時間対応のAIチャットボットが丁寧にMNP手続きをサポート" />
+  <meta property="og:url" content="https://mnp-chatbot.example.com" />
+  <meta property="og:image" content="%PUBLIC_URL%/og-image.png" />
+  <meta property="og:locale" content="ja_JP" />
+  
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="MNP チャットサポート" />
+  <meta name="twitter:description" content="携帯番号ポータビリティ手続きを簡単に" />
+  <meta name="twitter:image" content="%PUBLIC_URL%/twitter-card.png" />
+  
+  <!-- Icons -->
+  <link rel="apple-touch-icon" sizes="180x180" href="%PUBLIC_URL%/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="%PUBLIC_URL%/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="%PUBLIC_URL%/favicon-16x16.png" />
+  <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico" />
+  
+  <!-- Manifest -->
+  <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+  
+  <!-- Preconnect to external resources -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  
+  <!-- Google Fonts for Japanese -->
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=M+PLUS+1:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  
+  <!-- Critical CSS for performance -->
+  <style>
+    /* Reset and base styles */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    html {
+      font-size: 16px;
+      line-height: 1.6;
+      -webkit-text-size-adjust: 100%;
+      -webkit-tap-highlight-color: transparent;
+      scroll-behavior: smooth;
+    }
+    
+    body {
+      font-family: 'M PLUS 1', 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'Meiryo', sans-serif;
+      font-weight: 400;
+      background-color: #f8fafc;
+      color: #1e293b;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      position: relative;
+      min-height: 100vh;
+      /* iOS safe area support */
+      padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    }
+    
+    #root {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+    
+    /* Loading screen */
+    .initial-loading {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      transition: opacity 0.5s ease;
+    }
+    
+    .loading-content {
+      text-align: center;
+      color: white;
+      padding: 20px;
+    }
+    
+    .loading-logo {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 24px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(10px);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    
+    .loading-spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-top: 3px solid white;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    
+    .loading-text {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      letter-spacing: 0.5px;
+    }
+    
+    .loading-subtext {
+      font-size: 16px;
+      opacity: 0.8;
+      font-weight: 300;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    /* Reactが読み込まれたときにフォールバックを隠す */
+    .app-loaded #root > div:first-child {
+      display: none !important;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+    
+    /* PWA install prompt */
+    .pwa-install-prompt {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      right: 20px;
+      background: white;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      transform: translateY(120px);
+      opacity: 0;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 1000;
+      border: 1px solid #e2e8f0;
+    }
+    
+    .pwa-install-prompt.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    
+    .pwa-icon {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+    
+    /* Dark mode support */
+    @media (prefers-color-scheme: dark) {
+      body {
+        background-color: #0f172a;
+        color: #f1f5f9;
+      }
+      
+      .pwa-install-prompt {
+        background: #1e293b;
+        border-color: #334155;
+      }
+    }
+    
+    /* Mobile optimizations */
+    @media (max-width: 768px) {
+      html {
+        font-size: 14px;
+      }
+      
+      .loading-text {
+        font-size: 20px;
+      }
+      
+      .loading-subtext {
+        font-size: 14px;
+      }
+      
+      .pwa-install-prompt {
+        margin: 0 16px;
+        bottom: 16px;
+      }
+    }
+    
+    /* Accessibility */
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+      
+      html {
+        scroll-behavior: auto;
+      }
+    }
+    
+    /* High contrast mode */
+    @media (prefers-contrast: high) {
+      .loading-content {
+        background: rgba(0, 0, 0, 0.8);
+        border-radius: 8px;
+        padding: 32px;
+      }
+    }
+    
+    /* Error message styles */
+    .error-boundary {
+      padding: 32px;
+      text-align: center;
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      margin: 20px;
+    }
+    
+    .error-title {
+      color: #dc2626;
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    
+    .error-description {
+      color: #7f1d1d;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+  </style>
+  
+  <title>MNP チャットサポート | 携帯番号ポータビリティ手続きをAIでサポート</title>
+</head>
+<body>
+  <noscript>
+    <div style="
+      text-align: center; 
+      padding: 50px 20px; 
+      font-family: 'M PLUS 1', sans-serif;
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      margin: 20px;
+    ">
+      <h2 style="color: #dc2626; margin-bottom: 16px;">JavaScriptが無効になっています</h2>
+      <p style="color: #7f1d1d; margin-bottom: 8px; line-height: 1.5;">
+        このアプリケーションを使用するにはJavaScriptを有効にしてください。
+      </p>
+      <p style="color: #7f1d1d; font-size: 14px; line-height: 1.5;">
+        ブラウザの設定でJavaScriptを有効にしてから再度アクセスしてください。
+      </p>
+    </div>
+  </noscript>
+  
+  <!-- Initial loading screen -->
+  <div id="initial-loading" class="initial-loading">
+    <div class="loading-content">
+      <div class="loading-logo">
+        <div class="loading-spinner"></div>
+      </div>
+      <div class="loading-text">MNP チャットサポート</div>
+      <div class="loading-subtext">読み込み中...</div>
+      
+      <!-- 強制表示ボタン（3秒後に表示） -->
+      <button 
+        id="force-show-app" 
+        style="
+          display: none;
+          margin-top: 20px;
+          padding: 12px 24px;
+          background: #28a745;
+          color: white;
+          border: none;
+          border-radius: 8px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.3s ease;
+        "
+        onclick="forceShowApp()"
+      >
+        🚀 アプリを表示
+      </button>
+    </div>
+  </div>
+  
+  <!-- Main app container -->
+  <div id="root">
+    <!-- フォールバック コンテンツ - Reactが読み込まれない場合に表示 -->
+    <div style="
+      padding: 40px 20px;
+      text-align: center;
+      font-family: 'M PLUS 1', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    ">
+      <div style="background: rgba(255,255,255,0.1); padding: 30px; border-radius: 15px; backdrop-filter: blur(10px);">
+        <h1 style="margin-bottom: 20px; font-size: 24px; font-weight: 600;">MNP チャットサポート</h1>
+        <div style="margin-bottom: 20px;">
+          <div style="position: relative; width: 60px; height: 60px; margin: 0 auto 20px;">
+            <!-- 外側のリング -->
+            <div style="
+              position: absolute;
+              width: 60px;
+              height: 60px;
+              border: 3px solid rgba(255,255,255,0.2);
+              border-top: 3px solid #ffd700;
+              border-radius: 50%;
+              animation: spin 1.5s linear infinite;
+            "></div>
+            <!-- 内側のリング -->
+            <div style="
+              position: absolute;
+              top: 8px;
+              left: 8px;
+              width: 44px;
+              height: 44px;
+              border: 2px solid rgba(255,255,255,0.3);
+              border-bottom: 2px solid white;
+              border-radius: 50%;
+              animation: spin 1s linear infinite reverse;
+            "></div>
+            <!-- 中心のドット -->
+            <div style="
+              position: absolute;
+              top: 50%;
+              left: 50%;
+              width: 8px;
+              height: 8px;
+              background: white;
+              border-radius: 50%;
+              transform: translate(-50%, -50%);
+              animation: pulse 2s ease-in-out infinite;
+            "></div>
+          </div>
+          <p style="font-size: 16px; margin-bottom: 10px;">アプリケーションを読み込み中...</p>
+          <p style="font-size: 14px; opacity: 0.8;">しばらくお待ちください</p>
+        </div>
+        <div style="font-size: 12px; opacity: 0.7;">
+          <p>MNP（携帯番号ポータビリティ）手続きをサポート</p>
+          <p>※ アプリケーションを読み込み中です</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Error fallback for React -->
+  <div id="error-fallback" style="display: none;">
+    <div class="error-boundary">
+      <h2 class="error-title">アプリケーションエラーが発生しました</h2>
+      <p class="error-description">
+        申し訳ございません。アプリケーションでエラーが発生しました。<br>
+        ページを再読み込みしてお試しください。
+      </p>
+      <button onclick="window.location.reload()" style="
+        margin-top: 16px;
+        padding: 8px 16px;
+        background: #2563eb;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 500;
+      ">
+        ページを再読み込み
+      </button>
+    </div>
+  </div>
+  
+  <!-- PWA install prompt -->
+  <div id="pwa-install-prompt" class="pwa-install-prompt">
+    <div class="pwa-icon">
+      <svg width="24" height="24" fill="white" viewBox="0 0 24 24">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+      </svg>
+    </div>
+    <div style="margin-bottom: 16px;">
+      <div style="font-weight: 600; font-size: 16px; margin-bottom: 4px; color: #1e293b;">
+        ホーム画面に追加
+      </div>
+      <p style="font-size: 14px; color: #64748b; line-height: 1.4;">
+        アプリのように使用してMNP手続きをさらに便利に
+      </p>
+    </div>
+    <div style="display: flex; gap: 12px;">
+      <button id="pwa-install-button" style="
+        flex: 1; 
+        padding: 12px 20px; 
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white; 
+        border: none; 
+        border-radius: 8px; 
+        font-weight: 600;
+        font-size: 14px;
+        cursor: pointer;
+        transition: transform 0.2s ease;
+      " onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
+        インストール
+      </button>
+      <button id="pwa-dismiss-button" style="
+        padding: 12px 20px; 
+        background: transparent; 
+        color: #64748b; 
+        border: 1px solid #e2e8f0; 
+        border-radius: 8px;
+        font-weight: 500;
+        font-size: 14px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      " onmouseover="this.style.backgroundColor='#f8fafc'" onmouseout="this.style.backgroundColor='transparent'">
+        後で
+      </button>
+    </div>
+  </div>
+  
+  <!-- Application scripts -->
+  <script>
+    // アプリケーション強制表示機能
+    function forceShowApp() {
+      console.log('🚀 アプリケーション強制表示');
+      
+      // ローディング画面を非表示
+      const loadingElement = document.getElementById('initial-loading');
+      if (loadingElement) {
+        loadingElement.style.display = 'none';
+      }
+      
+      // Reactアプリが読み込まれていない場合の代替表示
+      const rootElement = document.getElementById('root');
+      if (rootElement && !rootElement.hasChildNodes()) {
+        rootElement.innerHTML = `
+          <div style="
+            min-height: 100vh;
+            background: #f8fafc;
+            display: flex;
+            flex-direction: column;
+          ">
+            <!-- ヘッダー -->
+            <div style="
+              background: white;
+              border-bottom: 1px solid #e2e8f0;
+              padding: 12px 16px;
+              box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            ">
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <div style="
+                  width: 32px;
+                  height: 32px;
+                  background: #2563eb;
+                  border-radius: 50%;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  color: white;
+                  font-weight: bold;
+                  font-size: 14px;
+                ">AI</div>
+                <div>
+                  <h1 style="margin: 0; font-size: 18px; font-weight: 600; color: #1e293b;">
+                    MNPサポート
+                  </h1>
+                  <p style="margin: 0; font-size: 12px; color: #64748b;">
+                    ステップガイド
+                  </p>
+                </div>
+              </div>
+            </div>
+            
+            <!-- チャットエリア -->
+            <div style="
+              flex: 1;
+              padding: 16px;
+              overflow-y: auto;
+              display: flex;
+              flex-direction: column;
+              gap: 16px;
+            ">
+              <!-- AIメッセージ -->
+              <div style="display: flex; align-items: flex-start; gap: 8px;">
+                <div style="
+                  width: 32px;
+                  height: 32px;
+                  background: #2563eb;
+                  border-radius: 50%;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  color: white;
+                  font-weight: bold;
+                  font-size: 12px;
+                  flex-shrink: 0;
+                ">AI</div>
+                <div style="
+                  background: #f1f5f9;
+                  padding: 12px 16px;
+                  border-radius: 18px 18px 18px 4px;
+                  max-width: 80%;
+                  color: #334155;
+                  font-size: 14px;
+                  line-height: 1.5;
+                ">
+                  こんにちは！MNP（携帯番号ポータビリティ）のサポートを担当いたします。<br><br>
+                  どのようなことでお手伝いできますか？
+                </div>
+              </div>
+              
+              <!-- クイックリプライ -->
+              <div style="
+                display: flex;
+                flex-wrap: wrap;
+                gap: 8px;
+                margin-left: 40px;
+              ">
+                <button onclick="sendQuickReply('MNP手続きの流れを教えて')" style="
+                  background: white;
+                  border: 1px solid #e2e8f0;
+                  padding: 8px 12px;
+                  border-radius: 16px;
+                  font-size: 12px;
+                  color: #475569;
+                  cursor: pointer;
+                  transition: all 0.2s;
+                " onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='white'">
+                  MNP手続きの流れを教えて
+                </button>
+                <button onclick="sendQuickReply('必要な書類は何ですか？')" style="
+                  background: white;
+                  border: 1px solid #e2e8f0;
+                  padding: 8px 12px;
+                  border-radius: 16px;
+                  font-size: 12px;
+                  color: #475569;
+                  cursor: pointer;
+                  transition: all 0.2s;
+                " onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='white'">
+                  必要な書類は何ですか？
+                </button>
+                <button onclick="sendQuickReply('手数料について知りたい')" style="
+                  background: white;
+                  border: 1px solid #e2e8f0;
+                  padding: 8px 12px;
+                  border-radius: 16px;
+                  font-size: 12px;
+                  color: #475569;
+                  cursor: pointer;
+                  transition: all 0.2s;
+                " onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='white'">
+                  手数料について知りたい
+                </button>
+                <button onclick="sendQuickReply('他の質問をする')" style="
+                  background: white;
+                  border: 1px solid #e2e8f0;
+                  padding: 8px 12px;
+                  border-radius: 16px;
+                  font-size: 12px;
+                  color: #475569;
+                  cursor: pointer;
+                  transition: all 0.2s;
+                " onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='white'">
+                  他の質問をする
+                </button>
+              </div>
+            </div>
+            
+            <!-- 入力エリア -->
+            <div style="
+              background: white;
+              border-top: 1px solid #e2e8f0;
+              padding: 12px 16px;
+            ">
+              <div style="
+                display: flex;
+                gap: 8px;
+                align-items: center;
+              ">
+                <input 
+                  id="chat-input" 
+                  type="text" 
+                  placeholder="メッセージを入力..."
+                  style="
+                    flex: 1;
+                    padding: 12px 16px;
+                    border: 1px solid #e2e8f0;
+                    border-radius: 20px;
+                    font-size: 14px;
+                    outline: none;
+                  "
+                  onkeypress="if(event.key==='Enter') sendMessage()"
+                />
+                <button onclick="sendMessage()" style="
+                  width: 40px;
+                  height: 40px;
+                  background: #2563eb;
+                  border: none;
+                  border-radius: 50%;
+                  color: white;
+                  cursor: pointer;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  font-size: 16px;
+                ">📤</button>
+              </div>
+            </div>
+            
+            <!-- タブバー -->
+            <div style="
+              background: white;
+              border-top: 1px solid #e2e8f0;
+              padding: 8px 0;
+              display: flex;
+              justify-content: space-around;
+            ">
+              <button onclick="switchTab('chat')" style="
+                background: none;
+                border: none;
+                padding: 8px 16px;
+                border-radius: 8px;
+                background: #2563eb;
+                color: white;
+                font-size: 12px;
+                cursor: pointer;
+              ">💬 チャット</button>
+              <button onclick="switchTab('escalation')" style="
+                background: none;
+                border: none;
+                padding: 8px 16px;
+                border-radius: 8px;
+                color: #64748b;
+                font-size: 12px;
+                cursor: pointer;
+              ">📞 相談</button>
+              <button onclick="switchTab('roadmap')" style="
+                background: none;
+                border: none;
+                padding: 8px 16px;
+                border-radius: 8px;
+                color: #64748b;
+                font-size: 12px;
+                cursor: pointer;
+              ">🗺️ 手順</button>
+              <button onclick="switchTab('settings')" style="
+                background: none;
+                border: none;
+                padding: 8px 16px;
+                border-radius: 8px;
+                color: #64748b;
+                font-size: 12px;
+                cursor: pointer;
+              ">⚙️ 設定</button>
+              <button onclick="switchTab('admin')" style="
+                background: none;
+                border: none;
+                padding: 8px 16px;
+                border-radius: 8px;
+                color: #64748b;
+                font-size: 12px;
+                cursor: pointer;
+              ">📊 管理</button>
+            </div>
+          </div>
+        `;
+      }
+    }
+    
+    // クイックリプライ送信
+    function sendQuickReply(message) {
+      sendMessage(message);
+    }
+    
+    // メッセージ送信
+    function sendMessage(customMessage) {
+      const input = document.getElementById('chat-input');
+      const message = customMessage || input?.value;
+      if (!message?.trim()) return;
+      
+      if (input && !customMessage) {
+        input.value = '';
+      }
+      
+      // ユーザーメッセージを追加
+      addMessage(message, 'user');
+      
+      // AIレスポンスをシミュレート
+      setTimeout(() => {
+        let response = '';
+        if (message.includes('流れ') || message.includes('手続き')) {
+          response = 'MNP手続きは以下の3ステップです：<br><br>1️⃣ 現在のキャリアでMNP予約番号を取得<br>2️⃣ 新しいキャリアで契約手続き<br>3️⃣ 回線切り替え（通常1-2時間）<br><br>詳しい手順をご案内いたします！';
+        } else if (message.includes('書類')) {
+          response = 'MNP手続きに必要な書類：<br><br>✅ 本人確認書類（運転免許証、マイナンバーカードなど）<br>✅ クレジットカードまたは銀行口座情報<br>✅ MNP予約番号（有効期限内）<br><br>オンライン手続きなら最短30分で完了します！';
+        } else if (message.includes('手数料')) {
+          response = 'MNP手数料について：<br><br>📋 MNP転出手数料：0円～3,300円（キャリアにより異なる）<br>📋 新規事務手数料：3,300円程度<br>📋 SIMカード発行料：440円程度<br><br>※格安SIMへの乗り換えで月額料金を大幅節約できます！';
+        } else {
+          response = 'ご質問ありがとうございます。MNP手続きについて、具体的にどのような点でお困りでしょうか？<br><br>• 手続きの流れ<br>• 必要書類<br>• 手数料<br>• エラーの解決<br><br>上記のボタンからお選びいただくか、お気軽にご質問ください！';
+        }
+        addMessage(response, 'ai');
+      }, 1000);
+    }
+    
+    // メッセージ追加
+    function addMessage(message, sender) {
+      const chatArea = document.querySelector('[style*="flex: 1"][style*="padding: 16px"]');
+      if (!chatArea) return;
+      
+      const messageElement = document.createElement('div');
+      messageElement.style.cssText = 'display: flex; align-items: flex-start; gap: 8px;' + 
+        (sender === 'user' ? 'justify-content: flex-end;' : '');
+      
+      if (sender === 'user') {
+        messageElement.innerHTML = \`
+          <div style="
+            background: #2563eb;
+            padding: 12px 16px;
+            border-radius: 18px 18px 4px 18px;
+            max-width: 80%;
+            color: white;
+            font-size: 14px;
+            line-height: 1.5;
+          ">\${message}</div>
+        \`;
+      } else {
+        messageElement.innerHTML = \`
+          <div style="
+            width: 32px;
+            height: 32px;
+            background: #2563eb;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 12px;
+            flex-shrink: 0;
+          ">AI</div>
+          <div style="
+            background: #f1f5f9;
+            padding: 12px 16px;
+            border-radius: 18px 18px 18px 4px;
+            max-width: 80%;
+            color: #334155;
+            font-size: 14px;
+            line-height: 1.5;
+          ">\${message}</div>
+        \`;
+      }
+      
+      chatArea.appendChild(messageElement);
+      messageElement.scrollIntoView({ behavior: 'smooth' });
+    }
+    
+    // タブ切り替え
+    function switchTab(tab) {
+      let content = '';
+      switch(tab) {
+        case 'escalation':
+          content = '<div style="padding: 40px 20px; text-align: center;"><h2>📞 エスカレーション</h2><p>専門オペレーターへの接続準備中...</p></div>';
+          break;
+        case 'roadmap':
+          content = '<div style="padding: 40px 20px; text-align: center;"><h2>🗺️ MNP手順ロードマップ</h2><p>手続きフローを表示中...</p></div>';
+          break;
+        case 'settings':
+          content = '<div style="padding: 40px 20px; text-align: center;"><h2>⚙️ 設定</h2><p>アプリケーション設定...</p></div>';
+          break;
+        case 'admin':
+          content = '<div style="padding: 40px 20px; text-align: center;"><h2>📊 管理画面</h2><p>統計情報とFAQ管理...</p></div>';
+          break;
+        default:
+          forceShowApp();
+          return;
+      }
+      
+      const rootElement = document.getElementById('root');
+      if (rootElement) {
+        rootElement.innerHTML = content;
+      }
+    }
+    
+    // 自動初期化
+    (function() {
+      console.log('🚀 MNP チャットサポート - 初期化開始');
+      
+      // 3秒後に強制表示ボタンを表示
+      setTimeout(() => {
+        const button = document.getElementById('force-show-app');
+        if (button) {
+          button.style.display = 'block';
+        }
+      }, 3000);
+      
+      // 5秒後に自動的にアプリを表示
+      setTimeout(() => {
+        const loadingElement = document.getElementById('initial-loading');
+        if (loadingElement && loadingElement.style.display !== 'none') {
+          console.log('⏰ 自動タイムアウト - アプリケーションを表示');
+          forceShowApp();
+        }
+      }, 5000);
+      
+      // Service Worker対応チェック
+      if ('serviceWorker' in navigator) {
+        console.log('PWA対応ブラウザ');
+      }
+    })();
+
+    // Global error handler
+    window.addEventListener('error', function(e) {
+      console.error('Global error:', e.error);
+      showErrorFallback();
+    });
+    
+    window.addEventListener('unhandledrejection', function(e) {
+      console.error('Unhandled promise rejection:', e.reason);
+      showErrorFallback();
+    });
+    
+    function showErrorFallback() {
+      const errorElement = document.getElementById('error-fallback');
+      const rootElement = document.getElementById('root');
+      const loadingElement = document.getElementById('initial-loading');
+      
+      if (errorElement && rootElement) {
+        rootElement.style.display = 'none';
+        errorElement.style.display = 'block';
+        
+        if (loadingElement) {
+          loadingElement.style.display = 'none';
+        }
+      }
+    }
+    
+    // Remove loading screen after app loads
+    window.addEventListener('load', function() {
+      setTimeout(function() {
+        const loadingElement = document.getElementById('initial-loading');
+        if (loadingElement) {
+          loadingElement.style.opacity = '0';
+          setTimeout(() => {
+            loadingElement.style.display = 'none';
+          }, 500);
+        }
+      }, 1500);
+    });
+    
+    // PWA Install Logic
+    let deferredPrompt;
+    const installPrompt = document.getElementById('pwa-install-prompt');
+    const installButton = document.getElementById('pwa-install-button');
+    const dismissButton = document.getElementById('pwa-dismiss-button');
+    
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      
+      // Show install prompt if not already installed and not dismissed recently
+      const lastDismissed = localStorage.getItem('pwa-prompt-dismissed');
+      const dismissedRecently = lastDismissed && (Date.now() - parseInt(lastDismissed)) < 7 * 24 * 60 * 60 * 1000; // 7 days
+      
+      if (!window.matchMedia('(display-mode: standalone)').matches && !dismissedRecently) {
+        setTimeout(() => {
+          installPrompt.classList.add('show');
+        }, 5000);
+      }
+    });
+    
+    installButton.addEventListener('click', async () => {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        deferredPrompt = null;
+        installPrompt.classList.remove('show');
+        
+        // Analytics tracking
+        if (window.gtag) {
+          gtag('event', 'pwa_install', {
+            'outcome': outcome
+          });
+        }
+      }
+    });
+    
+    dismissButton.addEventListener('click', () => {
+      installPrompt.classList.remove('show');
+      localStorage.setItem('pwa-prompt-dismissed', Date.now().toString());
+    });
+    
+    // Service Worker Registration
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('/sw.js')
+          .then(function(registration) {
+            console.log('SW registered: ', registration);
+            
+            // Check for updates
+            registration.addEventListener('updatefound', function() {
+              const newWorker = registration.installing;
+              newWorker.addEventListener('statechange', function() {
+                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                  // New content available
+                  if (window.showUpdateNotification) {
+                    window.showUpdateNotification();
+                  }
+                }
+              });
+            });
+          })
+          .catch(function(registrationError) {
+            console.log('SW registration failed: ', registrationError);
+          });
+      });
+    }
+    
+    // Performance monitoring
+    window.addEventListener('load', function() {
+      // Web Vitals monitoring
+      if ('PerformanceObserver' in window) {
+        try {
+          // Largest Contentful Paint
+          new PerformanceObserver((entryList) => {
+            for (const entry of entryList.getEntries()) {
+              if (window.gtag) {
+                gtag('event', 'timing_complete', {
+                  'name': 'LCP',
+                  'value': Math.round(entry.startTime)
+                });
+              }
+            }
+          }).observe({entryTypes: ['largest-contentful-paint']});
+          
+          // First Input Delay
+          new PerformanceObserver((entryList) => {
+            for (const entry of entryList.getEntries()) {
+              if (window.gtag) {
+                gtag('event', 'timing_complete', {
+                  'name': 'FID',
+                  'value': Math.round(entry.processingStart - entry.startTime)
+                });
+              }
+            }
+          }).observe({entryTypes: ['first-input']});
+        } catch (e) {
+          console.warn('Performance monitoring setup failed:', e);
+        }
+      }
+    });
+    
+    // Theme detection and application
+    function applyTheme() {
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const storedTheme = localStorage.getItem('theme');
+      const theme = storedTheme || (prefersDark ? 'dark' : 'light');
+      
+      document.documentElement.setAttribute('data-theme', theme);
+      
+      // Update theme color meta tag
+      const themeColorMeta = document.querySelector('meta[name="theme-color"]');
+      if (themeColorMeta) {
+        themeColorMeta.content = theme === 'dark' ? '#1e293b' : '#2563eb';
+      }
+    }
+    
+    // Apply theme on load
+    applyTheme();
+    
+    // Listen for theme changes
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', applyTheme);
+    
+    // Network status monitoring
+    function updateNetworkStatus() {
+      const isOnline = navigator.onLine;
+      document.documentElement.setAttribute('data-network', isOnline ? 'online' : 'offline');
+      
+      if (!isOnline && window.showOfflineNotification) {
+        window.showOfflineNotification();
+      }
+    }
+    
+    window.addEventListener('online', updateNetworkStatus);
+    window.addEventListener('offline', updateNetworkStatus);
+    updateNetworkStatus();
+  </script>
+  
+  <!-- Google Analytics (replace with your tracking ID) -->
+  <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=GA_TRACKING_ID"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'GA_TRACKING_ID', {
+      'anonymize_ip': true,
+      'respect_do_not_track': true,
+      'custom_map': {
+        'custom_parameter_1': 'user_engagement'
+      }
+    });
+  </script> -->
+</body>
+</html>

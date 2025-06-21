@@ -1,0 +1,178 @@
+{
+  "carrierId": "mineo",
+  "carrierName": "mineo",
+  "carrierType": "mvno",
+  "officialName": "株式会社オプテージ",
+  "networkType": "multi_carrier",
+  "supportedTechnologies": ["4G", "5G"],
+  "websiteUrl": "https://mineo.jp/",
+  "customerServicePhone": "0120-977-384",
+  "businessHours": "9:00-18:00 (年中無休)",
+  
+  "mnpInfo": {
+    "mnpReservationMethod": [
+      {
+        "method": "mypage",
+        "name": "マイページ",
+        "url": "https://my.mineo.jp/",
+        "availableHours": "24時間",
+        "processingTime": "即時発行"
+      },
+      {
+        "method": "phone",
+        "name": "電話",
+        "phoneNumber": "0120-977-384",
+        "availableHours": "9:00-18:00",
+        "processingTime": "約10分"
+      }
+    ],
+    "mnpReservationFee": 0,
+    "minimumUsagePeriod": "なし",
+    "earlyTerminationFee": 0,
+    "mnpReservationValidityDays": 15
+  },
+
+  "contractInfo": {
+    "contractFee": 3300,
+    "simIssueFee": 440,
+    "esimSupported": true,
+    "simTypes": ["nanoSIM", "microSIM", "標準SIM", "eSIM"],
+    "onlineContractAvailable": true,
+    "storeContractAvailable": true,
+    "minimumAge": 18,
+    "identificationRequired": ["運転免許証", "マイナンバーカード", "健康保険証+補助書類"]
+  },
+
+  "planInfo": {
+    "networkOptions": [
+      {
+        "network": "Dプラン",
+        "carrier": "ドコモ回線",
+        "features": ["広いエリア", "安定した通信"]
+      },
+      {
+        "network": "Aプラン", 
+        "carrier": "au回線",
+        "features": ["地下鉄で強い", "山間部カバー"]
+      },
+      {
+        "network": "Sプラン",
+        "carrier": "ソフトバンク回線", 
+        "features": ["都市部で高速", "5G対応"]
+      }
+    ],
+    "mainPlans": [
+      {
+        "planName": "マイピタ 1GB",
+        "monthlyFee": 1298,
+        "dataLimit": "1GB",
+        "callRate": "22円/30秒"
+      },
+      {
+        "planName": "マイピタ 5GB",
+        "monthlyFee": 1518,
+        "dataLimit": "5GB", 
+        "callRate": "22円/30秒"
+      },
+      {
+        "planName": "マイピタ 10GB",
+        "monthlyFee": 1958,
+        "dataLimit": "10GB",
+        "callRate": "22円/30秒"
+      },
+      {
+        "planName": "マイピタ 20GB",
+        "monthlyFee": 2178,
+        "dataLimit": "20GB",
+        "callRate": "22円/30秒"
+      }
+    ]
+  },
+
+  "technicalInfo": {
+    "apnSettings": {
+      "dPlan": {
+        "apn": "mineo-d.jp",
+        "username": "mineo@k-opti.com",
+        "password": "mineo",
+        "authType": "CHAP"
+      },
+      "aPlan": {
+        "apn": "mineo.jp", 
+        "username": "mineo@k-opti.com",
+        "password": "mineo",
+        "authType": "CHAP"
+      },
+      "sPlan": {
+        "apn": "mineo-s.jp",
+        "username": "mineo@k-opti.com", 
+        "password": "mineo",
+        "authType": "CHAP"
+      }
+    },
+    "supportedBands": {
+      "dPlan_4g": ["Band 1", "Band 3", "Band 19", "Band 21"],
+      "aPlan_4g": ["Band 1", "Band 18", "Band 26"],
+      "sPlan_4g": ["Band 1", "Band 3", "Band 8"],
+      "5g": ["n77", "n78", "n257"]
+    }
+  },
+
+  "activationProcess": {
+    "physicalSim": [
+      "SIMカード到着後、マイページにログイン",
+      "「MNP転入切替」を選択",
+      "SIM製造番号下4桁を入力",
+      "「回線切替」実行（約30分で完了）",
+      "SIMカードを挿入",
+      "APN設定を実施"
+    ],
+    "esim": [
+      "mineoアプリをダウンロード",
+      "申込み完了後、アプリでeSIMプロファイルをダウンロード",
+      "マイページでMNP転入切替",
+      "約30分で開通完了"
+    ],
+    "supportUrl": "https://support.mineo.jp/setup/"
+  },
+
+  "features": {
+    "uniqueFeatures": [
+      "トリプルキャリア対応（ドコモ・au・ソフトバンク）",
+      "パケット放題 Plus（1.5Mbps使い放題）",
+      "フリータンク（パケットシェア）",
+      "マイネ王（コミュニティサイト）"
+    ],
+    "advantages": [
+      "3つの回線から選択可能",
+      "コミュニティが活発",
+      "パケットシェア機能",
+      "料金プランが豊富"
+    ],
+    "disadvantages": [
+      "平日昼間の速度低下",
+      "キャリアメール有料オプション",
+      "5G対応エリア限定"
+    ]
+  },
+
+  "troubleshooting": {
+    "commonIssues": [
+      {
+        "issue": "通信速度が遅い",
+        "solution": "パケット放題 Plusの利用、通信の最適化オフ設定"
+      },
+      {
+        "issue": "APN設定がうまくいかない",
+        "solution": "プラン別APN設定の確認、プロファイル削除後再設定"
+      },
+      {
+        "issue": "SIMカードが認識されない",
+        "solution": "SIMカードの挿し直し、端末の再起動"
+      }
+    ]
+  },
+
+  "lastUpdated": "2024-06-18",
+  "version": "1.0"
+}
