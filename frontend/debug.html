@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MNP チャットサポート - アプリケーション情報</title>
+  <style>
+    body {
+      font-family: 'M PLUS 1', 'Noto Sans JP', sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      min-height: 100vh;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .app-info {
+      background: rgba(255,255,255,0.1);
+      padding: 30px;
+      border-radius: 15px;
+      backdrop-filter: blur(10px);
+      margin-bottom: 20px;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+    .status {
+      padding: 15px;
+      border-radius: 8px;
+      margin: 15px 0;
+      backdrop-filter: blur(5px);
+    }
+    .success { background: rgba(40, 167, 69, 0.8); }
+    .info { background: rgba(23, 162, 184, 0.8); }
+    .warning { background: rgba(255, 193, 7, 0.8); color: #212529; }
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 15px;
+      margin-top: 20px;
+    }
+    .feature-card {
+      background: rgba(255,255,255,0.1);
+      padding: 20px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+    .version-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    h1, h2, h3 { margin-top: 0; }
+    .badge {
+      display: inline-block;
+      padding: 4px 8px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>📱 MNP チャットサポート</h1>
+    
+    <div class="app-info">
+      <div class="version-info">
+        <h2>🚀 アプリケーション情報</h2>
+        <div class="badge">v1.0.0</div>
+      </div>
+      
+      <div class="status success">
+        <strong>✅ アプリケーション稼働中</strong><br>
+        MNPチャットサポートが正常に動作しています
+      </div>
+      
+      <div class="status info">
+        <strong>📋 アプリケーション概要</strong><br>
+        携帯番号ポータビリティ（MNP）手続きをAIチャットボットでサポートするPWAアプリケーションです。
+      </div>
+    </div>
+    
+    <div class="app-info">
+      <h2>🎯 主要機能</h2>
+      
+      <div class="feature-grid">
+        <div class="feature-card">
+          <h3>💬 AIチャット</h3>
+          <p>LINE風インターフェースでMNP手続きを分かりやすくガイド</p>
+        </div>
+        
+        <div class="feature-card">
+          <h3>📞 エスカレーション</h3>
+          <p>複雑な問題はオペレーターへ自動接続</p>
+        </div>
+        
+        <div class="feature-card">
+          <h3>🗺️ ロードマップ</h3>
+          <p>MNP手続きの全体フローを視覚的に表示</p>
+        </div>
+        
+        <div class="feature-card">
+          <h3>⚙️ 設定管理</h3>
+          <p>ユーザー個別の設定とカスタマイズ</p>
+        </div>
+        
+        <div class="feature-card">
+          <h3>📊 管理画面</h3>
+          <p>FAQ管理とエスカレーション統計</p>
+        </div>
+        
+        <div class="feature-card">
+          <h3>📱 PWA対応</h3>
+          <p>アプリライクな操作性とオフライン対応</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="app-info">
+      <h2>🏗️ 技術仕様</h2>
+      
+      <div class="status info">
+        <strong>フロントエンド</strong><br>
+        React 18, TypeScript, Tailwind CSS, Zustand, Framer Motion
+      </div>
+      
+      <div class="status info">
+        <strong>バックエンド</strong><br>
+        Node.js, Express, WebSocket, MongoDB
+      </div>
+      
+      <div class="status info">
+        <strong>PWA機能</strong><br>
+        Service Worker, Web App Manifest, オフライン対応
+      </div>
+    </div>
+    
+    <div class="app-info">
+      <h2>🎨 デザインシステム</h2>
+      
+      <div class="status success">
+        <strong>UI/UX</strong><br>
+        • モバイルファーストデザイン<br>
+        • ダークモード対応<br>
+        • アクセシビリティ準拠<br>
+        • 日本語フォント最適化
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    // アプリケーション情報の動的更新
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('MNP チャットサポート - アプリケーション情報ページ');
+      
+      // パフォーマンス情報を追加
+      if ('performance' in window) {
+        const loadTime = Math.round(performance.now());
+        const statusEl = document.createElement('div');
+        statusEl.className = 'status info';
+        statusEl.innerHTML = `
+          <strong>📈 パフォーマンス</strong><br>
+          ページ読み込み時間: ${loadTime}ms
+        `;
+        document.querySelector('.container').appendChild(statusEl);
+      }
+    });
+  </script>
+</body>
+</html>
